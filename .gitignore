@@ -7,6 +7,7 @@
 *.dll
 *.so
 *.dylib
+nvim-release-watcher
 nvim-release-watcher.linux
 nvim-release-watcher.darwin-arm64
 nvim-release-watcher.darwin-x86_64
