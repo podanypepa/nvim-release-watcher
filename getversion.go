@@ -21,6 +21,8 @@ func getVersion() (string, error) {
 			version = info[0]
 		}
 	})
-	c.Visit(DevelopmentPage)
+	if err := c.Visit(DevelopmentPage); err != nil {
+		return "", err
+	}
 	return version, nil
 }

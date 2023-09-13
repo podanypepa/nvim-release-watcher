@@ -17,6 +17,8 @@ func getReleaseFileTime() (string, error) {
 			createdTime = e.Text
 		}
 	})
-	c.Visit(AssetsPage)
+	if err := c.Visit(AssetsPage); err != nil {
+		return "", err
+	}
 	return createdTime, nil
 }
