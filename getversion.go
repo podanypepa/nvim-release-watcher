@@ -18,8 +18,7 @@ func getVersion() (string, error) {
 		if strings.Contains(e.Text, "NVIM") && version == "" {
 			version = e.Text
 			info := strings.Split(e.Text, "\n")
-			info = strings.Split(info[0], " ")
-			version = info[1]
+			version = info[0]
 		}
 	})
 	c.Visit(DevelopmentPage)
