@@ -7,7 +7,6 @@ import (
 	"sync"
 )
 
-
 func main() {
 	version, createdTime := "", ""
 
