@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	version, createdTime := "", ""
+	version, createdTime, localVersion := "", "", ""
 
 	wg := sync.WaitGroup{}
-	wg.Add(2)
+	wg.Add(3)
 
 	go func() {
 		defer wg.Done()
@@ -31,8 +31,18 @@ func main() {
 		}
 	}()
 
+	go func() {
+		defer wg.Done()
+		var err error
+		localVersion, err = getLocalVersion()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+	}()
+
 	wg.Wait()
 
-	fmt.Println("version:    ", version)
-	fmt.Println("createdTime:", createdTime)
+	fmt.Printf("github version: %s (%s)\n", version, createdTime)
+	fmt.Printf("local version:  %s\n", localVersion)
 }
