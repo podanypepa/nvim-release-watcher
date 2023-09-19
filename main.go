@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"sync"
+
+	"github.com/AlecAivazis/survey/v2"
 )
 
 func main() {
@@ -38,11 +40,29 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
 	}()
 
 	wg.Wait()
 
-	fmt.Printf("github version: %s (%s)\n", version, createdTime)
 	fmt.Printf("local version:  %s\n", localVersion)
+	fmt.Printf("github version: %s (%s)\n", version, createdTime)
+
+	if version != localVersion {
+		answer := false
+		prompt := &survey.Confirm{
+			Message: "Do you want to update nvim?",
+		}
+		survey.AskOne(prompt, &answer)
+
+		if answer {
+			if err := update(version); err != nil {
+				log.Fatal(err)
+			}
+			localVersion, err := getLocalVersion()
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Printf("new local version:  %s\n", localVersion)
+		}
+	}
 }
