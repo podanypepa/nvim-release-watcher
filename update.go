@@ -24,10 +24,9 @@ func update(version string) error {
 
 	version = strings.Split(version, " ")[1]
 	newDir := path.Join(dstDir, version)
-	log.Printf("newDir: %s\n", newDir)
 
 	if _, err := os.Stat(newDir); os.IsExist(err) {
-		log.Error().Msgf("dir %s is already exists", newDir)
+		log.Error().Caller().Msgf("dir %s is already exists", newDir)
 		return fmt.Errorf("dir %s is already exists", newDir)
 	}
 
@@ -41,11 +40,11 @@ func update(version string) error {
 		return err
 	}
 
-	if err := os.Chmod("./nvim-macos/bin/nvim", 0755); err != nil {
-		log.Fatal().Err(err).Msg("failed to chmod")
+	if err := os.Chmod("./nvim-macos-arm64/bin/nvim", 0755); err != nil {
+		log.Fatal().Caller().Err(err).Msg("failed to chmod")
 	}
 
-	if err := os.Rename("./nvim-macos/", newDir); err != nil {
+	if err := os.Rename("./nvim-macos-arm64", newDir); err != nil {
 		return err
 	}
 
@@ -54,11 +53,9 @@ func update(version string) error {
 	}
 
 	srcBin := path.Join(newDir, "bin/nvim")
-	if os.Symlink(srcBin, symlinkName); err != nil {
-		return err
-	}
+	_ = os.Symlink(srcBin, symlinkName)
 
-	return os.RemoveAll("./nvim-macos")
+	return os.RemoveAll("./nvim-macos-arm64")
 }
 
 func extractTarGz(gzipStream io.Reader) error {
@@ -77,7 +74,7 @@ func extractTarGz(gzipStream io.Reader) error {
 		}
 
 		if err != nil {
-			log.Fatal().Err(err).Msg("failed to read tar")
+			log.Fatal().Caller().Err(err).Msg("failed to read tar")
 		}
 
 		switch header.Typeflag {
