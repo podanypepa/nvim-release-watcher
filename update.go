@@ -5,11 +5,12 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -23,8 +24,10 @@ func update(version string) error {
 
 	version = strings.Split(version, " ")[1]
 	newDir := path.Join(dstDir, version)
+	log.Printf("newDir: %s\n", newDir)
 
 	if _, err := os.Stat(newDir); os.IsExist(err) {
+		log.Error().Msgf("dir %s is already exists", newDir)
 		return fmt.Errorf("dir %s is already exists", newDir)
 	}
 
@@ -39,7 +42,7 @@ func update(version string) error {
 	}
 
 	if err := os.Chmod("./nvim-macos/bin/nvim", 0755); err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("failed to chmod")
 	}
 
 	if err := os.Rename("./nvim-macos/", newDir); err != nil {
@@ -74,7 +77,7 @@ func extractTarGz(gzipStream io.Reader) error {
 		}
 
 		if err != nil {
-			log.Fatalf("ExtractTarGz: Next() failed: %s", err.Error())
+			log.Fatal().Err(err).Msg("failed to read tar")
 		}
 
 		switch header.Typeflag {
