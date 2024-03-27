@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	nvimTarUrl  = "https://github.com/neovim/neovim/releases/download/nightly/nvim-macos.tar.gz"
+	nvimTarUrl  = "https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-arm64.tar.gz"
 	dstDir      = "/Users/pepa/bin/neovim/"
 	symlinkName = "/Users/pepa/bin/nvim"
 )
